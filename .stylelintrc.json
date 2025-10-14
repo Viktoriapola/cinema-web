@@ -1,0 +1,9 @@
+{
+    "extends": ["stylelint-order", "stylelint-config-standard-scss", "stylelint-config-recommended-vue/scss"],
+    "rules": {
+        "declaration-block-no-duplicate-properties": true,
+        "length-zero-no-unit": null,
+        "selector-class-pattern": null,
+        "declaration-property-value-no-unknown": null
+    }
+}

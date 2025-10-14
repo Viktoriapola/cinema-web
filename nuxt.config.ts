@@ -1,5 +1,15 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true }
-})
+    modules: ['@nuxtjs/eslint-module', '@nuxtjs/stylelint-module'],
+    css: ['@/assets/scss/main.scss'],
+    imports: {
+        dirs: ['store//*', 'api//*', 'composables//*'],
+        autoImport: true
+    },
+    runtimeConfig: {
+        public: {
+            apiURI: process.env.API_URI
+        }
+    },
+    compatibilityDate: '2025-07-15',
+    devtools: { enabled: true }
+});
