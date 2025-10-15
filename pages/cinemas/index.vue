@@ -1,16 +1,16 @@
 <template>
     <div class="card-container">
-        <h1>Movies</h1>
+        <h1>Cinemas</h1>
         <div v-for="item of data" :key="item.id" class="card">
-            <div>{{ item.title }}</div>
-            <ControlButton @click="navigateTo(`/${item.id}`)">Посмотреть сиансы</ControlButton>
+            <div>{{ item.name }}</div>
+            <ControlButton @click="navigateTo(`/cinemas/${item.id}`)">Посмотреть сиансы</ControlButton>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-const { data, execute } = useMoviesApi().getMovies();
-execute();
+const { data, execute } = useCinemasApi().getCinemas()
+execute()
 </script>
 
 <style scoped lang="scss">

@@ -38,7 +38,7 @@ export function useAuthStore() {
     const logout = () => {
         storage.remove('token');
         isAuth.value = false;
-        navigateTo('/movies');
+        navigateTo('/');
     };
 
     const register = async (form: AuthForm) => {

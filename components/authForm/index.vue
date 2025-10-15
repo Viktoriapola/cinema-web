@@ -52,15 +52,15 @@ const checkValidation = (): boolean => {
 };
 
 const submit = async () => {
-    errorMessage.value = '';
-
-    if (!checkValidation() && !isLogin.value) return;
+    setErrorMessage(null);
 
     if (isLogin.value) {
         await login(form.value);
         return;
     }
-    register(form.value);
+    if (checkValidation()) {
+        register(form.value);
+    }
 };
 
 const resetErrorMessage = () => {
