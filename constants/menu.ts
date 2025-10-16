@@ -3,19 +3,19 @@ import type { MenuItem } from '@/types/menu';
 export const MENU: MenuItem[] = [
     {
         key: 'movies',
-        name: 'Movies',
+        name: 'Фильмы',
         path: '/',
         isAllowedWithoutAuth: true
     },
     {
         key: 'cinemas',
-        name: 'Cinemas',
+        name: 'Кинотеатры',
         path: '/cinemas',
         isAllowedWithoutAuth: true
     },
     {
         key: 'tickets',
-        name: 'Tickets',
+        name: 'Мои билеты',
         path: '/tickets',
         isAllowedWithoutAuth: false
     }

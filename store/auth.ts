@@ -11,9 +11,9 @@ export function useAuthStore() {
     const errorMessage = ref<string | null>(null);
     const form = ref<AuthForm>({ ...AUTH_FORM });
 
-    onMounted(() => {
+    if(import.meta.client) {
         isAuth.value = Boolean(storage.get('token'));
-    });
+    }
 
     const setErrorMessage = (message: string | null) => {
         errorMessage.value = message;

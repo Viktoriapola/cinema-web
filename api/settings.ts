@@ -1,5 +1,3 @@
-import type { IUserInfoBooking } from '@/types/user';
-
 export function useSettingsApi() {
     function getSettings(token: string) {
         const config = useRuntimeConfig();

@@ -1,5 +1,3 @@
-import type { IUserInfoBooking } from '@/types/user';
-
 export function usePaymantApi() {
     function pay(token: string, bookingId: string) {
         const config = useRuntimeConfig();

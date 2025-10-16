@@ -1,27 +1,22 @@
 <template>
-    <div class="card-container">
-        <h1>Cinemas</h1>
-        <div v-for="item of data" :key="item.id" class="card">
-            <div>{{ item.name }}</div>
-            <ControlButton @click="navigateTo(`/cinemas/${item.id}`)">Посмотреть сиансы</ControlButton>
-        </div>
-    </div>
+    <PageWrapper title="Кинотеатры" :isLoading="isLoading">
+        <Table :columns="columns" :rows="data" class="movie">
+            <template #cell-action="{ row }">
+                <ControlButton class="action-button" @click="navigateTo(`/cinemas/${row.id}`)">Посмотреть сиансы</ControlButton>
+            </template>
+        </Table>
+    </PageWrapper>
 </template>
 
 <script setup lang="ts">
-const { data, execute } = useCinemasApi().getCinemas()
-execute()
+import Table from '@/components/Table.vue';
+
+const columns = [
+    { key: 'name', label: 'Кинотеатр' },
+    { key: 'address', label: 'Адрес' },
+    { key: 'action', label: '' }
+];
+const { data, execute, status } = useCinemasApi().getCinemas();
+execute();
+const isLoading = computed(() => !['success', 'error'].includes(status.value));
 </script>
-
-<style scoped lang="scss">
-.card-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.card {
-    padding: 20px;
-    border: 1px solid black;
-}
-</style>

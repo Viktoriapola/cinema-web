@@ -1,8 +1,13 @@
 <template>
-    <div>
-        <AuthForm />
+    <div class="form-container ">
+        <FormAuth />
     </div>
 </template>
 
-<script setup lang="ts">
-</script>
+<style scoped lang="scss">
+.form-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+</style>

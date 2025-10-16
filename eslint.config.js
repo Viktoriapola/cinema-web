@@ -1,6 +1,5 @@
 import { createConfigForNuxt } from '@nuxt/eslint-config/flat'
 import tsParser from '@typescript-eslint/parser'
-import security from 'eslint-plugin-security'
 
 export default createConfigForNuxt({
     features: {
@@ -9,7 +8,7 @@ export default createConfigForNuxt({
     }
 })
     .append({
-        ignores: ['/*.d.ts', '/*.declare.ts', 'constants/app.ts']
+        ignores: ['/*.d.ts', '/*.declare.ts']
     })
     .append({
         rules: {
@@ -26,19 +25,6 @@ export default createConfigForNuxt({
             'vue/attributes-order': 'off',
             'no-undef': 'off',
             'vue/no-mutating-props': 'off',
-
-            // отключаем TS предупреждения
-            // '@typescript-eslint/no-explicit-any': 'off',
-            // '@typescript-eslint/no-unused-vars': 'off',
-
-            // отключаем unicorn/prefer-number-properties
-            // 'unicorn/prefer-number-properties': 'off',
-
-            // // отключаем предупреждения по регуляркам
-            // 'regexp/no-obscure-range': 'off',
-            // 'regexp/prefer-d': 'off',
-            // 'regexp/negation': 'off',
-            // 'regexp/no-super-linear-backtracking': 'off'
         }
     })
     .append({
@@ -59,13 +45,5 @@ export default createConfigForNuxt({
                 ecmaVersion: 'latest',
                 sourceType: 'module'
             }
-        }
-    })
-    .append({
-        plugins: {
-            security
-        },
-        rules: {
-            ...security.configs.recommended.rules
         }
     })

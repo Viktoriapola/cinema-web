@@ -1,30 +1,28 @@
 <template>
-    <div class="p-4">
-        <h1 class="text-xl font-bold mb-4">Выбрать место</h1>
-
-        <div class="container">
-            <!-- Проходим по рядам -->
-            <div v-for="row in seatGrid" :key="row.row" class="container__row">
-                <!-- Проходим по местам в каждом ряду -->
-                <div
-                    v-for="seat in row.seats"
-                    :key="seat.seatKey"
-                    class="container__seat"
-                    :class="{
-                        'container__seat--active': selectedSeats.includes(seat.seatKey),
-                        'container__seat--disabled': bookedSeats?.includes(seat.seatKey)
-                    }"
-                    @click="selectSeat(seat.seatKey)"
-                >
-                    {{ seat.seat }}
+    <PageWrapper withBack title="Выбрать место" :isLoading="isLoading">
+        <div>
+            <div class="container">
+                <div v-for="(row, index) in seatGrid" :key="row.row" class="container__row">
+                    <div>{{ `${index + 1} ряд`  }}</div>
+                    <div
+                        v-for="seat in row.seats"
+                        :key="seat.seatKey"
+                        class="container__seat"
+                        :class="{
+                            'container__seat--active': selectedSeats.includes(seat.seatKey),
+                            'container__seat--disabled': bookedSeats?.includes(seat.seatKey)
+                        }"
+                        @click="selectSeat(seat.seatKey)"
+                    >
+                        {{ seat.seat }}
+                    </div>
                 </div>
             </div>
+            <div class="container__button">
+                <ControlButton :disabled="!selectedSeats.length" @click="book">Забронировать</ControlButton>
+            </div>
         </div>
-
-        <div class="mt-4 text-center">
-            <ControlButton @click="book">Забронировать</ControlButton>
-        </div>
-    </div>
+    </PageWrapper>
 </template>
 
 <script setup lang="ts">
@@ -32,9 +30,12 @@ import type { IBookedSeat } from '@/types/common';
 
 const route = useRoute();
 const { isAuth } = useAuthStore();
+const { showError, showSuccess } = useSnackbar();
 
-const { data, execute } = useSessionApi().getSession(route.params.id as string);
+const { data, execute, status } = useSessionApi().getSession(route.params.id as string);
 execute();
+
+const isLoading = computed(() => !['success', 'error'].includes(status.value));
 
 const selectedSeats = ref<string[]>([]);
 
@@ -78,12 +79,14 @@ const book = async () => {
             const response = await useSessionApi().bookSession(route.params.id as string, body);
             if (response) {
                 navigateTo('/tickets');
+                showSuccess('Билеты успешно забронированны')
             }
-        } catch (error: any) {
-            console.log(error);
+        } catch (error: unknown) {
+            showError('Что-то пошло не так, попробуйте позже.', error)
         }
     } else {
         navigateTo('/login');
+        showError('Требуется авторизация')
     }
 };
 </script>
@@ -93,31 +96,46 @@ const book = async () => {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
 
     &__row {
+        color: $color-white;
         display: flex;
         justify-content: space-between;
+        align-items: center;
         gap: 10px;
     }
 
     &__seat {
         cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        border-radius: 5px;
+        color: $color-white;
         width: 30px;
         height: 30px;
-        border: 1px solid black;
+        background-color: $color-silver-screen-light;
 
         &:hover {
-            background-color: aqua;
+            background-color: $color-golden-popcorn;
         }
 
         &--active {
-            background-color: greenyellow;
+            background-color: $color-success;
         }
 
         &--disabled {
-            background-color: red;
+            background-color: $color-error;
             pointer-events: none;
         }
+    }
+
+    &__button {
+        display: flex;
+        justify-content: center;
     }
 }
 </style>
