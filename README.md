@@ -1,75 +1,36 @@
-# Nuxt Minimal Starter
+# Cinema Web (Nuxt 4)
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Веб-приложение для бронирования билетов в кино.
 
-## Setup
+## Требования
+- Node.js 20+
+- PNPM 9+ (или npm/yarn)
 
-Make sure to install dependencies:
-
+## Установка
 ```bash
-# npm
-npm install
-
-# pnpm
 pnpm install
+# или npm install
+# или yarn install
 
-# yarn
-yarn install
+Создайте .env с API URI:
+API_URI=https://api.example.com
 
-# bun
-bun install
-```
+Скрипты
+pnpm dev          # запуск dev-сервера
+pnpm build        # сборка продакшн
+pnpm preview      # предпросмотр сборки
+pnpm test         # запуск всех тестов
+pnpm test:watch   # тесты в режиме наблюдения
+pnpm test:ui      # UI Vitest
 
-## Development Server
+Структура
+pages/ — маршруты
+components/ — UI-компоненты
+composables/ — переиспользуемая логика
+api/ — функции для работы с backend
+store/ — стор-модули
+assets/scss/ — стили
+tests/ — unit-тесты
 
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
+Запуск
 pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
