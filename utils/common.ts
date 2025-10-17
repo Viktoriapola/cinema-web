@@ -9,7 +9,8 @@ export const getDate = (date: string) => {
 };
 
 export const getTime = (date: string) => {
-    const time = date.split('T')[1];
-    if (!time) return '';
-    return time.slice(0, 5);
+    const d = new Date(date);
+    const hours = d.getHours().toString().padStart(2, '0');
+    const minutes = d.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
 };

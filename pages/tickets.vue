@@ -1,22 +1,17 @@
 <template>
     <ClientOnly>
         <PageWrapper withBack title="Мои билеты" :isLoading="isLoading">
-            <div>
-                <div>
-                    <h2>не оплаченные</h2>
-                    <ul>
-                        <li v-for="item of data.notPaid" :key="item.id">
-                            {{ item.movieSessionId }}
+            <div class="tikets">
+                <TicketsWrapper title="Hе оплаченные" :data="data.notPaid">
+                    <template #action="{ item }">
+                        <div class="tikets__pay">
+                            <Timer :seconds="timer" @finish="getBookings" />
                             <ControlButton @click="getPayment(item.id)">Оплатить</ControlButton>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>будущие</h2>
-                    <ul>
-                        <li v-for="item of data.future" :key="item.id">{{ item.movieSessionId }}</li>
-                    </ul>
-                </div>
+                        </div>
+                    </template>
+                </TicketsWrapper>
+                <TicketsWrapper title="Будущие" :data="data.future" />
+                <TicketsWrapper title="Прошедшие" :data="data.past" />
             </div>
         </PageWrapper>
     </ClientOnly>
@@ -28,29 +23,32 @@ import type { IUserInfoBooking } from '@/types/user';
 type TFilteredData = {
     notPaid: IUserInfoBooking[];
     future: IUserInfoBooking[];
+    past: IUserInfoBooking[];
 };
 
 definePageMeta({
     middleware: 'auth'
 });
 
-const storage = useLocalStorage();
-const { showError } = useSnackbar()
+const { showError, showSuccess } = useSnackbar();
 
 const isLoading = ref<boolean>(false);
+const timer = ref<number | string>(0);
 const data = ref<TFilteredData>({
     notPaid: [],
-    future: []
+    future: [],
+    past: []
 });
 
 const filterData = (bookings: IUserInfoBooking[]): TFilteredData => {
-    const result: TFilteredData = { notPaid: [], future: [] };
+    const result: TFilteredData = { notPaid: [], future: [], past: [] };
 
     bookings.forEach((ticket) => {
-        if (!ticket.isPaid) {
-            result.notPaid.push(ticket);
-        } else {
+        // проверка только на isPaid так как в параметрах нет даты сеанса, только дата бронирования
+        if (ticket.isPaid) {
             result.future.push(ticket);
+        } else {
+            result.notPaid.push(ticket);
         }
     });
 
@@ -58,32 +56,32 @@ const filterData = (bookings: IUserInfoBooking[]): TFilteredData => {
 };
 
 const getTimer = async () => {
-    const token = storage.get('token');
-    const response = await useSettingsApi().getSettings(token as string);
-    console.log(response);
+    const response = await useSettingsApi().getSettings();
+    timer.value = response.bookingPaymentTimeSeconds;
 };
 
 const getPayment = async (bookingId: string) => {
-    const token = storage.get('token');
-    const response = await usePaymantApi().pay(token as string, bookingId);
-    if (response) {
-        await getBookings();
+    try {
+        const response = await usePaymantApi().pay(bookingId);
+        if (response) {
+            await getBookings();
+            showSuccess('Билеты успешно оплачены');
+        }
+    } catch (error: unknown) {
+        showError('Что-то пошло не так!', error);
     }
 };
 
 const getBookings = async () => {
     isLoading.value = true;
-    const token = storage.get('token');
-    if (token) {
-        try {
-            const response = await useUserApi().getBookings(token as string);
-            if (response) {
-                isLoading.value = false;
-                data.value = filterData(response);
-            }
-        } catch (error: unknown) {
-            showError('Ошибка загрузки данных', error)
+    try {
+        const response = await useUserApi().getBookings();
+        if (response) {
+            isLoading.value = false;
+            data.value = filterData(response);
         }
+    } catch (error: unknown) {
+        showError('Ошибка загрузки данных', error);
     }
 };
 
@@ -92,3 +90,17 @@ onMounted(async () => {
     data.value.notPaid.length && (await getTimer());
 });
 </script>
+
+<style scoped lang="scss">
+.tikets {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    &__pay {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+}
+</style>
