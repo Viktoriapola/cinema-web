@@ -10,7 +10,7 @@
                         <div>Время: {{ getTime(item.bookedAt) }}</div>
                     </div>
                     <div class="list-item__seats">
-                        <div v-for="seat of item.seats" class="list-item__seat seat">
+                        <div v-for="(seat, index) of item.seats" :key="index" class="list-item__seat seat">
                             <div class="seat__row">Ряд: {{ seat.rowNumber }}</div>
                             <div class="seat__col">Место: {{ seat.seatNumber }}</div>
                         </div>

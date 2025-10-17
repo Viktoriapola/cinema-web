@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts" generic="T extends { id: string | number; startTime: string; [key: string]: any }">
-import { getTime } from '@/utils/common';
+import { getTime } from '../utils/common';
 
 defineProps<{
     itemName: string;

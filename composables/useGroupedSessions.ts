@@ -1,5 +1,5 @@
 import { computed, type Ref } from 'vue';
-import { getDate } from '@/utils/common';
+import { getDate } from '../utils/common';
 
 export function useGroupedSessions<T extends { startTime: string; [key: string]: any }>(
     groupKey: 'cinemaId' | 'movieId',

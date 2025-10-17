@@ -8,9 +8,6 @@ export default createConfigForNuxt({
     }
 })
     .append({
-        ignores: ['/*.d.ts', '/*.declare.ts']
-    })
-    .append({
         rules: {
             'vue/html-indent': ['error', 4],
             'vue/multi-word-component-names': 'off',
